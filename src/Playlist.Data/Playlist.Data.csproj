@@ -50,13 +50,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Impl\ArtistsDao.cs" />
     <Compile Include="Impl\CassandraInfo.cs" />
     <Compile Include="ICassandraInfo.cs" />
+    <Compile Include="IArtistsDao.cs" />
+    <Compile Include="Dtos\TrackDto.cs" />
+    <Compile Include="ITracksDao.cs" />
+    <Compile Include="Impl\TracksDao.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

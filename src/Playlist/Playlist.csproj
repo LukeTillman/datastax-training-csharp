@@ -106,18 +106,29 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActionFilters\ExportModelStateToTempData.cs" />
+    <Compile Include="ActionFilters\ImportModelStateFromTempData.cs" />
+    <Compile Include="ActionFilters\ModelStateTempDataTransfer.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WindsorConfig.cs" />
     <Compile Include="App_Start\WindsorControllerFactory.cs" />
     <Compile Include="App_Start\WindsorInstallers\CassandraWindsorInstaller.cs" />
     <Compile Include="App_Start\WindsorInstallers\MvcControllersInstaller.cs" />
+    <Compile Include="Controllers\ArtistsController.cs" />
     <Compile Include="Controllers\ErrorsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\TracksController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Artists\IndexModel.cs" />
     <Compile Include="Models\Home\IndexModel.cs" />
+    <Compile Include="Models\Shared\ListsModel.cs" />
+    <Compile Include="Models\Shared\TrackHeaderModel.cs" />
+    <Compile Include="Models\Tracks\AddTrackModel.cs" />
+    <Compile Include="Models\Tracks\IndexModel.cs" />
+    <Compile Include="Models\Tracks\TrackModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -137,7 +148,9 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Views\Tracks\AddTrack.cshtml" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
   </ItemGroup>
@@ -152,6 +165,15 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Errors\NotFound.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Artists\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Shared\TrackHeader.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Tracks\Index.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

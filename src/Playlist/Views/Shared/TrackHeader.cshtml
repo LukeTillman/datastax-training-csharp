@@ -1,0 +1,23 @@
+﻿@using Playlist.Models.Shared
+@model Playlist.Models.Shared.TrackHeaderModel
+
+@if (Model.Frame == null || Model.Frame == false)
+{
+    <div id="topmatter" class="alphabet">
+        <a id="homebutton" href="@Url.Action("Index", "Home")">Home</a>
+        <a id="add_track" href="@Url.Action("AddTrack", "Tracks")">Add a Song</a>
+    </div>
+}
+
+<div class="alphabet">
+    @foreach (string genre in ListsModel.Genres)
+    {
+        <a href="@Url.Action("Index", "Tracks", new { genre, frame = Model.Frame })">@genre</a>
+    }
+    <hr/>
+    @foreach (string letter in ListsModel.Letters)
+    {
+        <a href="@Url.Action("Index", "Artists", new { q = letter, frame = Model.Frame })">@letter</a>@:&nbsp;&nbsp;
+    }
+    <hr/>
+</div>

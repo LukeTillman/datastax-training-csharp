@@ -1,0 +1,44 @@
+﻿@model Playlist.Models.Tracks.IndexModel
+@using Playlist.Models.Shared
+@using Playlist.Models.Tracks
+
+<section class="menu small">
+    @{ Html.RenderPartial("TrackHeader", new TrackHeaderModel {Frame = Model.Frame});}
+
+    @if (string.IsNullOrEmpty(Model.Genre) == false)
+    {
+        <h2>@Model.Genre Songs</h2>
+    } 
+    else if (string.IsNullOrEmpty(Model.Artist) == false)
+    {
+        <h2>Songs By @Model.Artist</h2>
+    }
+    else
+    {
+        <h2>Click a Genre or Artist Letter Above</h2>
+    }
+
+    <script type="text/javascript">
+        // When someone clicks the '+' button in the track picker, send a message to the parent window
+        function addTrack(id) {
+            parent.postMessage(id, '*');
+        }
+    </script>
+
+    <form id="form1" name="form1" method="post" action="">
+        <table class="table">
+            @foreach (TrackModel track in Model.Tracks)
+            {
+                <tr>
+                    @if (Model.Frame == true)
+                    {
+                        <td class="field_plus"><input type="button" name="add" value="+" onclick="addTrack('@track.TrackId')"/></td>
+                    }
+                    <td class="field_track">@track.Track</td>
+                    <td class="field_genre">@track.Genre</td>
+                    <td class="field_sec">@track.Length.ToString(@"m\:ss")</td>
+                </tr>
+            }
+        </table>
+    </form>
+</section>

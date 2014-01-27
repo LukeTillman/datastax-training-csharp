@@ -1,0 +1,21 @@
+﻿@model Playlist.Models.Artists.IndexModel
+@using Playlist.Models.Shared
+
+<section class="menu small">
+    @{ Html.RenderPartial("TrackHeader", new TrackHeaderModel {Frame = Model.Frame}); }
+
+    <form id="form1" name="form1" method="get" action="">
+        <input type="hidden" id="q" name="q" value="@Model.FirstLetter"/>
+        <button name="order" value="up">↑</button>
+        <button name="order" value="down">↓</button>
+        <h2>Artists starting with "@Model.FirstLetter"</h2>
+        <table>
+            @foreach (string artist in Model.Artists)
+            {
+                <tr>
+                    <td><a href="@Url.Action("Index", "Tracks", new { artist = artist, frame = Model.Frame })">@artist</a></td>
+                </tr>
+            }
+        </table>
+    </form>
+</section>

@@ -13,8 +13,8 @@ namespace Playlist.WindsorInstallers
     {
         public void Install(IWindsorContainer container, IConfigurationStore store)
         {
-            // Use the builder to create an instance of Session connected to localhost
-            Session sessionInstance = Cluster.Builder().AddContactPoint("localhost").Build().Connect();
+            // Use the builder to create an instance of Session connected to localhost in the "playlist" keyspace
+            Session sessionInstance = Cluster.Builder().AddContactPoint("localhost").Build().Connect("playlist");
 
             // Do container registrations
             container.Register(

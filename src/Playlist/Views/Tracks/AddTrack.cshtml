@@ -1,0 +1,37 @@
+﻿@using Playlist.Models.Shared
+@model Playlist.Models.Tracks.AddTrackModel
+
+<section class="menu small">
+    <a href="@Url.Action("Index", "Home")">Home</a>
+</section>
+
+@Html.ValidationSummary(string.Empty, new { @class = "error" })
+
+<form id="form1" name="form1" class="login_form" method="post" action="@Url.Action("AddTrackSubmit", "Tracks")">
+    <h1>Add A Track</h1>
+    <p>
+        @Html.LabelFor(m => m.MusicFile, "Track File Name")
+        @Html.TextBoxFor(m => m.MusicFile, new { placeholder = "Enter the Music File Name", required = "required" })
+    </p>
+    <p>
+        @Html.LabelFor(m => m.Artist, "Artist")
+        @Html.TextBoxFor(m => m.Artist, new { placeholder = "Artist name", required = "required" })
+    </p>
+    <p>
+        @Html.DropDownListFor(m => m.Genre, ListsModel.Genres.Select(g => new SelectListItem {Text = g, Value = g}))
+        @Html.LabelFor(m => m.Genre, "Genre") Genre
+    </p>
+    <p>
+        @Html.LabelFor(m => m.Track, "Track Name")
+        @Html.TextBoxFor(m => m.Track, new { placeholder = "Track name", required = "required" })
+    </p>
+    <p>
+        @Html.LabelFor(m => m.LengthInSeconds, "Track Length in Seconds")
+        @Html.TextBoxFor(m => m.LengthInSeconds, new { placeholder = "Track Length (s)", required = "required" })
+    </p>
+
+    <p>
+        <button type="submit" name="button" id="addTrack" value="addTrack">Add Track</button>
+        <button type="reset" id="reset">Clear Form</button>
+    </p>
+</form>
