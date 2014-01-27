@@ -11,5 +11,6 @@ namespace Playlist.Models.Tracks
         public string Track { get; set; }
         public string Genre { get; set; }
         public TimeSpan Length { get; set; }
+        public bool Starred { get; set; }
     }
 }

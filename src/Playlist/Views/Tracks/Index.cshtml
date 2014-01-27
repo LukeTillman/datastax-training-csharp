@@ -25,11 +25,36 @@
         }
     </script>
 
-    <form id="form1" name="form1" method="post" action="">
+    @* Only show the drop down if by genre *@
+    @if (string.IsNullOrEmpty(Model.Genre) == false)
+    {
+        <form id="howmany" name="howmany" method="get">
+            @Html.HiddenFor(m => m.Genre)
+            @Html.HiddenFor(m => m.Artist)
+            @Html.DropDownListFor(m => m.HowMany, new []
+            {
+                new SelectListItem { Text = "All", Value = "0" },
+                new SelectListItem { Text = "5", Value = "5" },
+                new SelectListItem { Text = "10", Value = "10" },
+                new SelectListItem { Text = "25", Value = "25" },
+                new SelectListItem { Text = "100", Value = "100" },
+            }, new { id = "howmanyform", onchange = "this.form.submit()" })
+        </form>
+    }
+
+    <form id="form1" name="form1" method="post" action="@Url.Action("StarTrack", "Tracks")">
+        <input type="hidden" name="ReturnUrl" id="ReturnUrl" value="@Request.RawUrl" />
         <table class="table">
             @foreach (TrackModel track in Model.Tracks)
             {
                 <tr>
+                    @if (Model.Frame == null || Model.Frame == false)
+                    {
+                        string starImage = track.Starred ? "~/images/yellowstar.png" : "~/images/emptystar.png";
+                        <td class="field_start">
+                            <button name="TrackId" value="@track.TrackId"><img src="@Url.Content(starImage)"/></button>
+                        </td>
+                    }
                     @if (Model.Frame == true)
                     {
                         <td class="field_plus"><input type="button" name="add" value="+" onclick="addTrack('@track.TrackId')"/></td>

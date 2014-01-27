@@ -23,8 +23,11 @@ namespace Playlist.Controllers
         /// Shows the Tracks view (optionally by artist or genre specified).
         /// </summary>
         [HttpGet]
-        public ActionResult Index(string artist, string genre, bool? frame)
+        public ActionResult Index(string artist, string genre, int? howMany, bool? frame)
         {
+            // If howMany is null, default it to 25
+            if (howMany.HasValue == false) howMany = 25;
+
             IEnumerable<TrackDto> tracks;
             if (string.IsNullOrEmpty(artist) == false)
             {
@@ -33,8 +36,13 @@ namespace Playlist.Controllers
             }
             else if (string.IsNullOrEmpty(genre) == false)
             {
+                // If howMany is 0, assume that means "All" and default to 100k
+                int numTracks = howMany.Value;
+                if (numTracks == 0)
+                    numTracks = 100000;
+
                 // Assume we're searching by genre
-                tracks = _tracksDao.ListSongsByGenre(genre);
+                tracks = _tracksDao.ListSongsByGenre(genre, numTracks);
             }
             else
             {
@@ -50,8 +58,10 @@ namespace Playlist.Controllers
                     TrackId = dto.TrackId, 
                     Track = dto.Track,
                     Genre = dto.Genre,
-                    Length = TimeSpan.FromSeconds(dto.LengthInSeconds)
+                    Length = TimeSpan.FromSeconds(dto.LengthInSeconds),
+                    Starred = dto.Starred
                 }),
+                HowMany = howMany.Value,
                 Frame = frame
             };
             return View(model);
@@ -84,6 +94,17 @@ namespace Playlist.Controllers
 
             // Go to the artist to see the new track
             return RedirectToAction("Index", "Tracks", new {artist = model.Artist});
+        }
+
+        /// <summary>
+        /// Stars a track.
+        /// </summary>
+        [HttpPost]
+        public ActionResult StarTrack(StarTrackModel model)
+        {
+            TrackDto dbTrack = _tracksDao.GetTrackById(model.TrackId);
+            _tracksDao.Star(dbTrack);
+            return Redirect(model.ReturnUrl);
         }
     }
 }

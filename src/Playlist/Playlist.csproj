@@ -128,6 +128,7 @@
     <Compile Include="Models\Shared\TrackHeaderModel.cs" />
     <Compile Include="Models\Tracks\AddTrackModel.cs" />
     <Compile Include="Models\Tracks\IndexModel.cs" />
+    <Compile Include="Models\Tracks\StarTrackModel.cs" />
     <Compile Include="Models\Tracks\TrackModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

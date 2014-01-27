@@ -13,6 +13,7 @@ namespace Playlist.Data.Dtos
         public string Genre { get; internal set; }
         public string MusicFile { get; internal set; }
         public int LengthInSeconds { get; internal set; }
+        public bool Starred { get; internal set; }
 
         /// <summary>
         /// Internal-only constructor for use when pulling data from the database.
@@ -26,13 +27,13 @@ namespace Playlist.Data.Dtos
         /// </summary>
         public TrackDto(string artist, string track, string genre, string musicFile, int lengthInSeconds)
         {
-            // We can generate the new UUID right here in the constructor
-            TrackId = Guid.NewGuid();
+            TrackId = Guid.NewGuid();       // We can generate the new UUID right here in the constructor
             Artist = artist;
             Track = track;
             Genre = genre;
             MusicFile = musicFile;
             LengthInSeconds = lengthInSeconds;
+            Starred = false;                // We never set this when adding a track, so leave this one alone
         }
     }
 }

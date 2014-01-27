@@ -24,30 +24,37 @@ namespace Playlist.Data.Impl
         /// </summary>
         public IEnumerable<TrackDto> ListSongsByArtist(string artist)
         {
-            // TODO - This bombs if the artist name contains a single-quote.
-            // TODO - Replace the next two lines of this method
-            // TODO - with code which uses a prepared statement and bound statement
-
-            string queryText = string.Format("SELECT * FROM track_by_artist WHERE artist = '{0}'", artist);
-            RowSet results = _session.Execute(queryText);
-
-            // TODO - Done replacing code
-
+            PreparedStatement preparedStatement = _session.Prepare("SELECT * FROM track_by_artist WHERE artist = ?");
+            BoundStatement boundStatement = preparedStatement.Bind(artist);
+            RowSet results = _session.Execute(boundStatement);
             return results.GetRows().Select(MapRowToTrackDto).ToList();
         }
 
         /// <summary>
         /// Gets a list of songs by genre.
         /// </summary>
-        public IEnumerable<TrackDto> ListSongsByGenre(string genre)
+        public IEnumerable<TrackDto> ListSongsByGenre(string genre, int numTracks)
         {
-            RowSet results = null;
-            
-            // TODO - implement the code here to retrieve the songs by genre in the "results" variable
-            if (results == null)
-                return new List<TrackDto>();
+            // TODO - The numTracks parameter contains the number of rows to return
+
+            PreparedStatement preparedStatement = _session.Prepare("SELECT * FROM track_by_genre WHERE genre = ?");
+            BoundStatement boundStatement = preparedStatement.Bind(genre);
+            RowSet results = _session.Execute(boundStatement);
 
             return results.GetRows().Select(MapRowToTrackDto).ToList();
+        }
+
+        /// <summary>
+        /// Gets a track by id or returns null if it cannot be found.
+        /// </summary>
+        public TrackDto GetTrackById(Guid trackId)
+        {
+            PreparedStatement preparedStatement = _session.Prepare("SELECT * FROM track_by_id WHERE track_id = ?");
+            BoundStatement boundStatement = preparedStatement.Bind(trackId);
+            RowSet results = _session.Execute(boundStatement);
+
+            // Return null if there is no track found (map function will return null if row from SingleOrDefault is null)
+            return MapRowToTrackDto(results.GetRows().SingleOrDefault());
         }
 
         /// <summary>
@@ -65,11 +72,29 @@ namespace Playlist.Data.Impl
             _session.Execute(boundStatement);
 
             preparedStatement =
-                _session.Prepare("INSERT INTO track_by_artist (genre, track_id, artist, track, track_length_in_seconds) VALUES (?, ?, ?, ?, ?)");
+                _session.Prepare("INSERT INTO track_by_id (genre, track_id, artist, track, track_length_in_seconds) VALUES (?, ?, ?, ?, ?)");
             boundStatement = preparedStatement.Bind(track.Genre, track.TrackId, track.Artist, track.Track, track.LengthInSeconds);
             _session.Execute(boundStatement);
 
-            // TODO - what are we missing here?
+            preparedStatement =
+                _session.Prepare("INSERT INTO track_by_genre (genre, track_id, artist, track, track_length_in_seconds) VALUES (?, ?, ?, ?, ?)");
+            boundStatement = preparedStatement.Bind(track.Genre, track.TrackId, track.Artist, track.Track, track.LengthInSeconds);
+            _session.Execute(boundStatement);
+
+            preparedStatement =
+                _session.Prepare("INSERT INTO track_by_artist (genre, track_id, artist, track, track_length_in_seconds) VALUES (?, ?, ?, ?, ?)");
+            boundStatement = preparedStatement.Bind(track.Genre, track.TrackId, track.Artist, track.Track, track.LengthInSeconds);
+            _session.Execute(boundStatement);
+        }
+
+        /// <summary>
+        /// Sets a track as being starred.
+        /// </summary>
+        public void Star(TrackDto dto)
+        {
+            if (dto == null) throw new ArgumentNullException("dto");
+
+            // TODO - Implement the code to update the necessary tables to indicate that a row has been starred
         }
 
         /// <summary>
@@ -77,7 +102,9 @@ namespace Playlist.Data.Impl
         /// </summary>
         private static TrackDto MapRowToTrackDto(Row row)
         {
-            return new TrackDto
+            if (row == null) return null;
+
+            var dto = new TrackDto
             {
                 TrackId = row.GetValue<Guid>("track_id"),
                 Artist = row.GetValue<string>("artist"),
@@ -86,6 +113,11 @@ namespace Playlist.Data.Impl
                 MusicFile = row.GetValue<string>("music_file"),
                 LengthInSeconds = row.GetValue<int>("track_length_in_seconds")
             };
+
+            // TODO - modify this to set this to the value of the new boolean column
+            dto.Starred = false;
+
+            return dto;
         }
     }
 }

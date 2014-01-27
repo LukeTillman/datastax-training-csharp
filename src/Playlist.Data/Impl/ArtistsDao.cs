@@ -24,6 +24,8 @@ namespace Playlist.Data.Impl
         /// </summary>
         public IEnumerable<string> ListArtistsByLetter(string firstLetter, bool desc)
         {
+            // TODO - Ensure that if the desc flag is set to true, the query will return the results in descending order
+
             // Build and execute the query
             string queryText = string.Format("SELECT * FROM artists_by_first_letter WHERE first_letter = '{0}'", firstLetter);
             RowSet results = _session.Execute(queryText);

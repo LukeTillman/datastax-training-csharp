@@ -10,6 +10,7 @@ namespace Playlist.Models.Tracks
         public string Artist { get; set; }
         public string Genre { get; set; }
         public IEnumerable<TrackModel> Tracks { get; set; }
+        public int HowMany { get; set; }
         public bool? Frame { get; set; }
     }
 }
