@@ -50,11 +50,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Dtos\PlaylistDto.cs" />
+    <Compile Include="Dtos\UserDto.cs" />
     <Compile Include="Impl\ArtistsDao.cs" />
     <Compile Include="Impl\CassandraInfo.cs" />
     <Compile Include="ICassandraInfo.cs" />
     <Compile Include="IArtistsDao.cs" />
     <Compile Include="Dtos\TrackDto.cs" />
+    <Compile Include="IUsersDao.cs" />
+    <Compile Include="IPlaylistsDao.cs" />
+    <Compile Include="Impl\PlaylistsDao.cs" />
+    <Compile Include="Impl\UsersDao.cs" />
     <Compile Include="ITracksDao.cs" />
     <Compile Include="Impl\TracksDao.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

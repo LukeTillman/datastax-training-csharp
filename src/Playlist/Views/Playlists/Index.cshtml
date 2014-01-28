@@ -1,0 +1,28 @@
+﻿@model Playlist.Models.Playlists.IndexModel
+
+<section class="menu small">
+    <a href="@Url.Action("Index", "Home")">Home</a>
+    <a href="@Url.Action("Logout", "Login")">Logout</a> <br/>
+    <h2>Playlists for @Model.Username</h2>
+
+    <form id="form1" class="playlist_form" name="form1" method="post" action="@Url.Action("AddPlaylist", "Playlists")">
+        <label for="playlist">New Playlist Name</label>
+        <input id="playlist" type="text" name="playlist"/>
+        <input type="submit" name="button" id="add" value="Add" />
+        <br/>
+
+        <table>
+            @foreach (string playlistName in Model.PlaylistNames)
+            {
+                <tr>
+                    <td>
+                        <a href="@Url.Action("DeletePlaylist", "Playlists", new { playlist = playlistName })">-</a>
+                    </td>
+                    <td>
+                        <a href="@Url.Action("ListTracks", "Playlists")">@playlistName</a>
+                    </td>
+                </tr>
+            }
+        </table>
+    </form>
+</section>

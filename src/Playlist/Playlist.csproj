@@ -118,12 +118,17 @@
     <Compile Include="Controllers\ArtistsController.cs" />
     <Compile Include="Controllers\ErrorsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\PlaylistsController.cs" />
     <Compile Include="Controllers\TracksController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Artists\IndexModel.cs" />
     <Compile Include="Models\Home\IndexModel.cs" />
+    <Compile Include="Models\Login\LoginModel.cs" />
+    <Compile Include="Models\Playlists\IndexModel.cs" />
+    <Compile Include="Models\Playlists\AddPlaylistModel.cs" />
     <Compile Include="Models\Shared\ListsModel.cs" />
     <Compile Include="Models\Shared\TrackHeaderModel.cs" />
     <Compile Include="Models\Tracks\AddTrackModel.cs" />
@@ -175,6 +180,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Tracks\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Login\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Playlists\Index.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

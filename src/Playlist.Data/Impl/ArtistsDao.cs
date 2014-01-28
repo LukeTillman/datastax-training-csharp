@@ -24,10 +24,11 @@ namespace Playlist.Data.Impl
         /// </summary>
         public IEnumerable<string> ListArtistsByLetter(string firstLetter, bool desc)
         {
-            // TODO - Ensure that if the desc flag is set to true, the query will return the results in descending order
+            // Add order by DESC clause if desc is true
+            string orderBy = desc ? " ORDER BY artist DESC" : string.Empty;
 
             // Build and execute the query
-            string queryText = string.Format("SELECT * FROM artists_by_first_letter WHERE first_letter = '{0}'", firstLetter);
+            string queryText = string.Format("SELECT * FROM artists_by_first_letter WHERE first_letter = '{0}'{1}", firstLetter, orderBy);
             RowSet results = _session.Execute(queryText);
 
             // Iterate the resulting rows and select just the value for the "artist" column into a return List

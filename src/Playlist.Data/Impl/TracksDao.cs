@@ -35,12 +35,9 @@ namespace Playlist.Data.Impl
         /// </summary>
         public IEnumerable<TrackDto> ListSongsByGenre(string genre, int numTracks)
         {
-            // TODO - The numTracks parameter contains the number of rows to return
-
-            PreparedStatement preparedStatement = _session.Prepare("SELECT * FROM track_by_genre WHERE genre = ?");
-            BoundStatement boundStatement = preparedStatement.Bind(genre);
+            PreparedStatement preparedStatement = _session.Prepare("SELECT * FROM track_by_genre WHERE genre = ? LIMIT ?");
+            BoundStatement boundStatement = preparedStatement.Bind(genre, numTracks);
             RowSet results = _session.Execute(boundStatement);
-
             return results.GetRows().Select(MapRowToTrackDto).ToList();
         }
 
@@ -94,7 +91,14 @@ namespace Playlist.Data.Impl
         {
             if (dto == null) throw new ArgumentNullException("dto");
 
-            // TODO - Implement the code to update the necessary tables to indicate that a row has been starred
+            PreparedStatement preparedStatement =
+                _session.Prepare("UPDATE track_by_genre USING TTL 30 SET starred = ? WHERE genre = ? AND artist = ? AND track = ? AND track_id = ?");
+            BoundStatement boundStatement = preparedStatement.Bind(true, dto.Genre, dto.Artist, dto.Track, dto.TrackId);
+            _session.Execute(boundStatement);
+
+            preparedStatement = _session.Prepare("UPDATE track_by_artist USING TTL 30 SET starred = ? WHERE artist = ? AND track = ? AND track_id = ?");
+            boundStatement = preparedStatement.Bind(true, dto.Artist, dto.Track, dto.TrackId);
+            _session.Execute(boundStatement);
         }
 
         /// <summary>
@@ -114,9 +118,10 @@ namespace Playlist.Data.Impl
                 LengthInSeconds = row.GetValue<int>("track_length_in_seconds")
             };
 
-            // TODO - modify this to set this to the value of the new boolean column
-            dto.Starred = false;
-
+            // If the field doesn't exist or is null we set it to false (this is WAY more efficient than wrapping a
+            // GetValue<bool> in a try...catch because we don't incur the Exception overhead)
+            var starred = row.GetValue<bool?>("starred");
+            dto.Starred = starred ?? false;
             return dto;
         }
     }
