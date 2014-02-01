@@ -22,16 +22,10 @@ namespace Playlist.Controllers
         /// Shows the playlists view for the currently logged in user.
         /// </summary>
         [ExportModelStateToTempData]
+        [RequiresLoggedInUser]
         public ActionResult Index()
         {
-            // Get logged in user and if not logged in, redirect to login page
             var user = (UserDto) Session["user"];
-            if (user == null)
-            {
-                ModelState.AddModelError("", "Not logged in.");
-                return RedirectToAction("Index", "Login");
-            }
-
             return View(new IndexModel
             {
                 Username = user.Username,
@@ -43,16 +37,11 @@ namespace Playlist.Controllers
         /// Adds a new playlist for the current user.
         /// </summary>
         [HttpPost]
+        [RequiresLoggedInUser]
         public ActionResult AddPlaylist(AddPlaylistModel model)
         {
             // Get logged in user and if not logged in, redirect to login page
-            var user = (UserDto)Session["user"];
-            if (user == null)
-            {
-                ModelState.AddModelError("", "Not logged in.");
-                return RedirectToAction("Index", "Login");
-            }
-
+            var user = (UserDto) Session["user"];
             _playlistsDao.CreatePlaylist(user, model.Playlist);
             return RedirectToAction("Index", "Playlists");
         }
@@ -61,16 +50,11 @@ namespace Playlist.Controllers
         /// Deletes a playlist for the current user.
         /// </summary>
         [HttpGet]
+        [RequiresLoggedInUser]
         public ActionResult DeletePlaylist(AddPlaylistModel model)
         {
             // Get logged in user and if not logged in, redirect to login page
-            var user = (UserDto)Session["user"];
-            if (user == null)
-            {
-                ModelState.AddModelError("", "Not logged in.");
-                return RedirectToAction("Index", "Login");
-            }
-
+            var user = (UserDto) Session["user"];
             _playlistsDao.DeletePlaylist(user, model.Playlist);
             return RedirectToAction("Index", "Playlists");
         }

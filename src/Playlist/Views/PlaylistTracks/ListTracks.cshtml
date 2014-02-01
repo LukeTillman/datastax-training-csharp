@@ -1,0 +1,63 @@
+﻿@using Playlist.Models.PlaylistTracks
+@model Playlist.Models.PlaylistTracks.ListTracksModel
+
+@section HtmlHead
+{
+    <script type="text/javascript">
+        function listener(event){
+           var trackIdInput = document.getElementById("track_id") ;
+           trackIdInput.setAttribute("value", event.data) ;
+           var addplaylist = document.getElementById("addplaylist").submit();
+        }
+
+        if (window.addEventListener) {
+            addEventListener("message", listener, false);
+        } else {
+            attachEvent("onmessage", listener);
+        }
+    </script>
+}
+
+@* Hidden form to post adding the playlist *@
+<form id="addplaylist" style="display: none" action="@Url.Action("AddTrackToPlaylist", "PlaylistTracks")" method="POST">
+    <input type="hidden" id="pl" name="PlaylistName" value="@Model.PlaylistName"/>
+    <input type="hidden" id="track_id" name="TrackId"/>
+    <input type="hidden" id="button" name="button" value="addTrack"/>
+</form>
+
+<section class="tracks">
+    <a href="@Url.Action("Index", "Home")">Home</a>
+    <a href="@Url.Action("Logout", "Login")">Logout</a> <br/>
+    <a href="@Url.Action("Index", "Playlists")">Back to My Playlists</a> <br/>
+    <h2>Playlist @Model.PlaylistName for @Model.Username</h2>
+    <h2>Total length: @Model.PlaylistLength.ToString(@"m\:ss")</h2>
+    <form id="form1" name="form1" method="get" action="@Url.Action("DeleteTrackFromPlaylist", "PlaylistTracks")">
+    <input type="hidden" name="PlaylistName" value="@Model.PlaylistName"/>
+    <div id="playlist_tracks" style="height:auto;width:500px;float:left;">
+        <table class="tracktable">
+            <tr>
+                <th></th>
+                <th>Track Name</th>
+                <th>Artist</th>
+                <th>Genre</th>
+                <th>Length (s)</th>
+            </tr>
+            @foreach (PlaylistTrackModel track in Model.PlaylistTracks)
+            {
+                <tr>
+                    <td><button type="submit" name="SequenceNumber" value="@track.SequenceNumber">-</button></td>
+                    <td>@track.TrackName</td>
+                    <td>@track.Artist</td>
+                    <td>@track.Genre</td>
+                    <td>@track.Length.ToString(@"m\:ss")</td>
+                </tr>
+            }
+        </table>
+    </div>
+
+    <div id="picker" style="height:800px;width:800px;">
+        <h2>Song Picker: </h2>
+        <iframe src="@Url.Action("Index", "Tracks", new { frame = true })" height="auto" width="400"></iframe>
+    </div>
+    </form>
+</section>

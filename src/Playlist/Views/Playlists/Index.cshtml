@@ -19,7 +19,7 @@
                         <a href="@Url.Action("DeletePlaylist", "Playlists", new { playlist = playlistName })">-</a>
                     </td>
                     <td>
-                        <a href="@Url.Action("ListTracks", "Playlists")">@playlistName</a>
+                        <a href="@Url.Action("ListTracks", "PlaylistTracks", new { playlistName })">@playlistName</a>
                     </td>
                 </tr>
             }

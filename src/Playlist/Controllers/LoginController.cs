@@ -24,6 +24,10 @@ namespace Playlist.Controllers
         [ImportModelStateFromTempData]
         public ActionResult Index()
         {
+            // Check if we were redirected because user was not logged in and add error message if so
+            if (TempData.ContainsKey(RequiresLoggedInUserAttribute.TempDataKey))
+                ModelState.AddModelError("", "Not logged in.");
+
             return View(new LoginModel());
         }
 

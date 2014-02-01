@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Cassandra;
 using Playlist.Data.Dtos;
 
@@ -26,26 +25,22 @@ namespace Playlist.Data.Impl
         /// </summary>
         public UserDto AddUser(string username, string password)
         {
-            string queryText = "INSERT INTO users ... ";            // TODO - fill in the rest of this statement
+            // TODO:  Once the C# driver supports conditional updates (native protocol v2), change this statement to:
+            //     INSERT INTO users (username, password) VALUES (?, ?) IF NOT EXISTS
+            // because right now it's just going to overwrite users, which isn't good
+            PreparedStatement prepared = _session.Prepare("INSERT INTO users (username, password) VALUES (?, ?)");
+            BoundStatement bound = prepared.Bind(username, password);
+            RowSet results = _session.Execute(bound);
 
-            // TODO
-            // TODO - prepare and execute the statement above to insert a new user. Also, capture the result set in a variable
-            // TODO - hint - the code is something like this:  ResultSet result = <execute statement>
-            // TODO
-
-
-            bool userGotInserted = false;   // just initialize this so this compiles.
-
-            // TODO - Retrieve the value of the "[applied]" column
-            // TODO - hint its something like userGotInserted = result.<get me the first row>.<get the boolean value of the "[applied]" column>
+            // var userGotInserted = results.GetRows().First().GetValue<bool>("[applied]");
+            var userGotInserted = true;
 
             // Return null if the user was not inserted
-
             if (userGotInserted == false)
                 return null;
 
             // Return the new user so the caller can get the userid
-            return new UserDto()
+            return new UserDto
             {
                 Username = username,
                 Password = password
@@ -57,7 +52,11 @@ namespace Playlist.Data.Impl
         /// </summary>
         public void DeleteUser(UserDto user)
         {
-            _session.Execute(string.Format("DELETE FROM users where username = '{0}'", user.Username));
+            var statement = new SimpleStatement(string.Format("DELETE FROM users where username = '{0}'", user.Username));
+
+            // Delete users with CL = Quorum
+            statement.SetConsistencyLevel(ConsistencyLevel.Quorum);
+            _session.Execute(statement);
         }
 
         /// <summary>
@@ -76,11 +75,22 @@ namespace Playlist.Data.Impl
         /// </summary>
         public UserDto ValidateLogin(string username, string password)
         {
-            UserDto user = GetUser(username);
+            UserDto user = GetUserWithQuorum(username);
             if (user == null || user.Password != password)
                 return null;
 
             return user;
+        }
+
+        /// <summary>
+        /// Gets a user by username but reads it with a consistency level of quorum.
+        /// </summary>
+        private UserDto GetUserWithQuorum(string username)
+        {
+            var statement = new SimpleStatement(string.Format("SELECT * FROM users where username = '{0}'", username));
+            statement.SetConsistencyLevel(ConsistencyLevel.Quorum);
+            RowSet results = _session.Execute(statement);
+            return MapRowToUserDto(results.GetRows().SingleOrDefault());
         }
 
         /// <summary>

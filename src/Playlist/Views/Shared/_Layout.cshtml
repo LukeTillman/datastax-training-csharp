@@ -4,6 +4,7 @@
         <title>@(ViewBag.Title ?? "Playlist")</title>
         <link rel="shortcut icon" href="@Url.Content("~/images/favicon.png")" />
         <link rel="stylesheet" href="@Url.Content("~/css/playlist.css")">
+        @RenderSection("HtmlHead", required: false)
     </head>
     <body>
         @RenderBody()

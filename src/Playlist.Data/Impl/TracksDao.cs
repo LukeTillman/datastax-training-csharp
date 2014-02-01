@@ -27,7 +27,7 @@ namespace Playlist.Data.Impl
             PreparedStatement preparedStatement = _session.Prepare("SELECT * FROM track_by_artist WHERE artist = ?");
             BoundStatement boundStatement = preparedStatement.Bind(artist);
             RowSet results = _session.Execute(boundStatement);
-            return results.GetRows().Select(MapRowToTrackDto).ToList();
+            return results.GetRows().Select(r => MapRowToTrackDto(r)).ToList();
         }
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace Playlist.Data.Impl
             PreparedStatement preparedStatement = _session.Prepare("SELECT * FROM track_by_genre WHERE genre = ? LIMIT ?");
             BoundStatement boundStatement = preparedStatement.Bind(genre, numTracks);
             RowSet results = _session.Execute(boundStatement);
-            return results.GetRows().Select(MapRowToTrackDto).ToList();
+            return results.GetRows().Select(r => MapRowToTrackDto(r)).ToList();
         }
 
         /// <summary>
@@ -51,7 +51,8 @@ namespace Playlist.Data.Impl
             RowSet results = _session.Execute(boundStatement);
 
             // Return null if there is no track found (map function will return null if row from SingleOrDefault is null)
-            return MapRowToTrackDto(results.GetRows().SingleOrDefault());
+            // and since the track_by_id table doesn't include the "starred" field, don't try to map it
+            return MapRowToTrackDto(results.GetRows().SingleOrDefault(), includeStarred: false);
         }
 
         /// <summary>
@@ -104,7 +105,7 @@ namespace Playlist.Data.Impl
         /// <summary>
         /// Maps a Cassandra row to a TrackDto.  Could be replaced with something like AutoMapper.
         /// </summary>
-        private static TrackDto MapRowToTrackDto(Row row)
+        private static TrackDto MapRowToTrackDto(Row row, bool includeStarred = true)
         {
             if (row == null) return null;
 
@@ -117,6 +118,9 @@ namespace Playlist.Data.Impl
                 MusicFile = row.GetValue<string>("music_file"),
                 LengthInSeconds = row.GetValue<int>("track_length_in_seconds")
             };
+
+            if (includeStarred == false)
+                return dto;
 
             // If the field doesn't exist or is null we set it to false (this is WAY more efficient than wrapping a
             // GetValue<bool> in a try...catch because we don't incur the Exception overhead)

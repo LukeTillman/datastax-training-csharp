@@ -13,5 +13,20 @@ namespace Playlist.Data
         /// Deletes the playlist specified.
         /// </summary>
         void DeletePlaylist(UserDto user, string playlistName);
+
+        /// <summary>
+        /// Gets the playlist specified for the user specified.
+        /// </summary>
+        PlaylistDto GetPlaylistForUser(string username, string playlistName);
+
+        /// <summary>
+        /// Deletes a track from a playlist by its sequence number.
+        /// </summary>
+        void DeleteTrackFromPlaylist(PlaylistDto playlist, long sequenceNumber);
+
+        /// <summary>
+        /// Adds a track to a playlist.
+        /// </summary>
+        void AddTrackToPlaylist(PlaylistDto playlist, PlaylistTrackDto playlistTrack);
     }
 }

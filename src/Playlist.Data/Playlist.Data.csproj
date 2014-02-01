@@ -51,6 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Dtos\PlaylistDto.cs" />
+    <Compile Include="Dtos\PlaylistTrackDto.cs" />
     <Compile Include="Dtos\UserDto.cs" />
     <Compile Include="Impl\ArtistsDao.cs" />
     <Compile Include="Impl\CassandraInfo.cs" />

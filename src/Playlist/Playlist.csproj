@@ -109,6 +109,7 @@
     <Compile Include="ActionFilters\ExportModelStateToTempData.cs" />
     <Compile Include="ActionFilters\ImportModelStateFromTempData.cs" />
     <Compile Include="ActionFilters\ModelStateTempDataTransfer.cs" />
+    <Compile Include="ActionFilters\RequiresLoggedInUserAttribute.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WindsorConfig.cs" />
@@ -120,6 +121,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\PlaylistsController.cs" />
+    <Compile Include="Controllers\PlaylistTracksController.cs" />
     <Compile Include="Controllers\TracksController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -129,6 +131,10 @@
     <Compile Include="Models\Login\LoginModel.cs" />
     <Compile Include="Models\Playlists\IndexModel.cs" />
     <Compile Include="Models\Playlists\AddPlaylistModel.cs" />
+    <Compile Include="Models\PlaylistTracks\AddTrackToPlaylistModel.cs" />
+    <Compile Include="Models\PlaylistTracks\DeleteTrackFromPlaylistModel.cs" />
+    <Compile Include="Models\PlaylistTracks\ListTracksModel.cs" />
+    <Compile Include="Models\PlaylistTracks\PlaylistTrackModel.cs" />
     <Compile Include="Models\Shared\ListsModel.cs" />
     <Compile Include="Models\Shared\TrackHeaderModel.cs" />
     <Compile Include="Models\Tracks\AddTrackModel.cs" />
@@ -186,6 +192,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Playlists\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\PlaylistTracks\ListTracks.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
