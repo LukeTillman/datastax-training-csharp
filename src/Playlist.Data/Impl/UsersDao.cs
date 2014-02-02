@@ -88,14 +88,9 @@ namespace Playlist.Data.Impl
         private UserDto GetUserWithQuorum(string username)
         {
             string queryText = string.Format("SELECT * FROM users where username = '{0}'", username);
-
-            // TODO
-            // TODO - take the queryText above and turn it into something
-            // TODO - set the consistency level on that something to QUORUM
-            // TODO - execute that something in the line below.
-            // TODO
-
-            RowSet results = _session.Execute("<something>");           // TODO - replace the "<something>" with the right thing.
+            var statement = new SimpleStatement(queryText);
+            statement.SetConsistencyLevel(ConsistencyLevel.Quorum);
+            RowSet results = _session.Execute(statement);
             return MapRowToUserDto(results.GetRows().SingleOrDefault());
         }
 

@@ -33,9 +33,9 @@ namespace Playlist.Data.Impl
         /// </summary>
         public void IncrementCounter(string counterName)
         {
-            // TODO
-            // TODO - add code the increment the given counter
-            // TODO
+            PreparedStatement prepared = _session.Prepare("UPDATE statistics SET counter_value = counter_value + 1 WHERE counter_name = ?");
+            BoundStatement bound = prepared.Bind(counterName);
+            _session.Execute(bound);
         }
 
         /// <summary>
@@ -43,9 +43,9 @@ namespace Playlist.Data.Impl
         /// </summary>
         public void DecrementCounter(string counterName)
         {
-            // TODO
-            // TODO - add code the decrement the given counter
-            // TODO
+            PreparedStatement prepared = _session.Prepare("UPDATE statistics SET counter_value = counter_value - 1 WHERE counter_name = ?");
+            BoundStatement bound = prepared.Bind(counterName);
+            _session.Execute(bound);
         }
 
         /// <summary>
