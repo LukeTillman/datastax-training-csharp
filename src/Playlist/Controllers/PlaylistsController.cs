@@ -11,11 +11,14 @@ namespace Playlist.Controllers
     public class PlaylistsController : Controller
     {
         private readonly IPlaylistsDao _playlistsDao;
+        private readonly IStatisticsDao _statsDao;
 
-        public PlaylistsController(IPlaylistsDao playlistsDao)
+        public PlaylistsController(IPlaylistsDao playlistsDao, IStatisticsDao statsDao)
         {
             if (playlistsDao == null) throw new ArgumentNullException("playlistsDao");
+            if (statsDao == null) throw new ArgumentNullException("statsDao");
             _playlistsDao = playlistsDao;
+            _statsDao = statsDao;
         }
 
         /// <summary>
@@ -43,6 +46,7 @@ namespace Playlist.Controllers
             // Get logged in user and if not logged in, redirect to login page
             var user = (UserDto) Session["user"];
             _playlistsDao.CreatePlaylist(user, model.Playlist);
+            _statsDao.IncrementCounter("playlists");
             return RedirectToAction("Index", "Playlists");
         }
 

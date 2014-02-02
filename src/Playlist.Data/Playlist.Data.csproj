@@ -52,12 +52,15 @@
   <ItemGroup>
     <Compile Include="Dtos\PlaylistDto.cs" />
     <Compile Include="Dtos\PlaylistTrackDto.cs" />
+    <Compile Include="Dtos\StatisticsDto.cs" />
     <Compile Include="Dtos\UserDto.cs" />
     <Compile Include="Impl\ArtistsDao.cs" />
     <Compile Include="Impl\CassandraInfo.cs" />
     <Compile Include="ICassandraInfo.cs" />
     <Compile Include="IArtistsDao.cs" />
     <Compile Include="Dtos\TrackDto.cs" />
+    <Compile Include="IStatisticsDao.cs" />
+    <Compile Include="Impl\StatisticsDao.cs" />
     <Compile Include="IUsersDao.cs" />
     <Compile Include="IPlaylistsDao.cs" />
     <Compile Include="Impl\PlaylistsDao.cs" />

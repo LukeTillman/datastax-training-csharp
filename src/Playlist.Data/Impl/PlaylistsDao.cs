@@ -1,5 +1,6 @@
 ﻿using System;
 using Cassandra;
+using Cassandra.Data.Linq;
 using Playlist.Data.Dtos;
 
 namespace Playlist.Data.Impl
@@ -48,15 +49,12 @@ namespace Playlist.Data.Impl
             // Change single quotes to a pair of single quotes for escaping into the database
             string fixedPlaylistName = playlistName.Replace("'", "''");
 
-            // TODO
-            // TODO -  In the string below (where it says <fill this in here>
-            // TODO -  add an a atomic block statement which will remove the playlist from a the playlists set
-            // TODO -  in the users table, and remove the playlist from the playlist_tracks table.
-            // TODO -  hint: the bind() method is already filled in, so think about the parameter markers
-            // TODO -  you'll need in the atomic block.
-            // TODO
-
-            PreparedStatement prepared = _session.Prepare("<fill this in here>");
+            const string batchStatement = "BEGIN BATCH " +
+                                          "UPDATE users SET playlist_names = playlist_names - {{ '{0}' }} WHERE username = ? " +
+                                          "DELETE FROM playlist_tracks WHERE username = ? AND playlist_name = ? " +
+                                          "APPLY BATCH";
+            
+            PreparedStatement prepared = _session.Prepare(string.Format(batchStatement, fixedPlaylistName));
             BoundStatement bound = prepared.Bind(user.Username, user.Username, playlistName);
             _session.Execute(bound);
 

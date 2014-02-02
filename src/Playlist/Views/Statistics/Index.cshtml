@@ -1,0 +1,15 @@
+﻿@using Playlist.Models.Statistics
+@model Playlist.Models.Statistics.IndexModel
+
+<section class="menu small">
+    <a href="@Url.Action("Index", "Home")">Home</a>
+    <h1>Statistics</h1>
+    <table class="info">
+        @foreach (StatCounterModel stat in Model.Statistics)
+        {
+            <tr>
+                <td>@stat.CounterName = @stat.CounterValue</td>
+            </tr>
+        }
+    </table>
+</section>

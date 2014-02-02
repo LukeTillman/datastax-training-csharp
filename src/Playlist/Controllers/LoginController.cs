@@ -10,11 +10,13 @@ namespace Playlist.Controllers
     public class LoginController : Controller
     {
         private readonly IUsersDao _usersDao;
+        private readonly IStatisticsDao _statsDao;
 
-        public LoginController(IUsersDao usersDao)
+        public LoginController(IUsersDao usersDao, IStatisticsDao statsDao)
         {
             if (usersDao == null) throw new ArgumentNullException("usersDao");
             _usersDao = usersDao;
+            _statsDao = statsDao;
         }
 
         /// <summary>
@@ -27,6 +29,8 @@ namespace Playlist.Controllers
             // Check if we were redirected because user was not logged in and add error message if so
             if (TempData.ContainsKey(RequiresLoggedInUserAttribute.TempDataKey))
                 ModelState.AddModelError("", "Not logged in.");
+
+            _statsDao.IncrementCounter("page hits: login");
 
             return View(new LoginModel());
         }
@@ -66,6 +70,8 @@ namespace Playlist.Controllers
             UserDto user = _usersDao.ValidateLogin(model.Username, model.Password);
             if (user == null)
             {
+                _statsDao.IncrementCounter("failed login attempts");
+
                 // Return to the login screen with an error
                 ModelState.AddModelError("", "Username or Password is invalid.");
                 return RedirectToAction("Index", "Login");
@@ -73,6 +79,7 @@ namespace Playlist.Controllers
 
             // In a real app, you wouldn't use Session, but this is just an example app, so cheat and use session
             Session["user"] = user;
+            _statsDao.IncrementCounter("valid login attempts");
             return RedirectToAction("Index", "Playlists");
         }
 
@@ -101,6 +108,7 @@ namespace Playlist.Controllers
 
             // In a real app, you wouldn't use Session, but this is just an example app, so cheat and use session
             Session["user"] = user;
+            _statsDao.IncrementCounter("users");
             return RedirectToAction("Index", "Playlists");
         }
 

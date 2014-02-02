@@ -37,6 +37,11 @@ namespace Playlist.Data.Impl
         {
             PreparedStatement preparedStatement = _session.Prepare("SELECT * FROM track_by_genre WHERE genre = ? LIMIT ?");
             BoundStatement boundStatement = preparedStatement.Bind(genre, numTracks);
+
+            //
+            //  TODO - Add a line here to automatically page the results 200 rows at a time
+            //
+
             RowSet results = _session.Execute(boundStatement);
             return results.GetRows().Select(r => MapRowToTrackDto(r)).ToList();
         }
